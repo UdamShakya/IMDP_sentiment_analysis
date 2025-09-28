@@ -1,6 +1,6 @@
 # src/train.py
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Embedding, GlobalAveragePooling1D, Dense
+from tensorflow.keras.models import Sequential # type: ignore
+from tensorflow.keras.layers import Embedding, GlobalAveragePooling1D, Dense # type: ignore
 from preprocess import preprocess_data
 
 VOCAB_SIZE = 10000

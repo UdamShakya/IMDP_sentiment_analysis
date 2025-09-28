@@ -12,16 +12,4 @@ Future steps include deployment via **Streamlit/Gradio** for interactive demos.
 - Advanced models (GRU, CNN, Transformers)
 - Easy deployment for demo
 
-## Project Structure
-imdb-sentiment-analysis/
-│── data/ # Dataset or scripts to download it
-│── notebooks/ # Jupyter notebooks for EDA & experiments
-│── src/ # Source code (train, evaluate, preprocessing)
-│ │── init.py
-│ │── data_loader.py
-│ │── preprocess.py
-│ │── train.py
-│ │── evaluate.py
-│── .gitignore # Ignore cache, model weights, temp files
-│── requirements.txt # Dependencies
-│── README.md # Project documentation
+

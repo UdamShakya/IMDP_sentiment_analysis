@@ -1,7 +1,7 @@
-# src/train_lstm.py
+# src/train_lstm.py (UPDATED)
 from tensorflow.keras.models import Sequential # type: ignore
 from tensorflow.keras.layers import Embedding, LSTM, Dense # type: ignore
-from tensorflow.keras.callbacks import EarlyStopping # type: ignore
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint # type: ignore
 from preprocess import preprocess_data
 
 VOCAB_SIZE = 10000
@@ -11,7 +11,7 @@ MAXLEN = 200
 def build_lstm_model():
     model = Sequential([
         Embedding(VOCAB_SIZE, EMBEDDING_DIM, input_length=MAXLEN),
-        LSTM(64),  # 64 LSTM units
+        LSTM(64),
         Dense(1, activation="sigmoid")
     ])
     model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
@@ -20,11 +20,16 @@ def build_lstm_model():
 if __name__ == "__main__":
     (x_train, y_train), (x_test, y_test) = preprocess_data()
     model = build_lstm_model()
+
+    # Early stopping: stop if val_loss doesn’t improve for 2 epochs
+    early_stopping = EarlyStopping(monitor="val_loss", patience=2, restore_best_weights=True)
+    checkpoint = ModelCheckpoint("models/lstm_best.h5", save_best_only=True)
+
     history = model.fit(
         x_train, y_train,
-        epochs=5,
+        epochs=10,
         batch_size=128,
-        validation_split=0.2
+        validation_split=0.2,
+        callbacks=[early_stopping, checkpoint]
     )
-    model.save("models/lstm_model.h5")
-    print("LSTM model saved to models/lstm_model.h5")
+    print("Best LSTM model saved to models/lstm_best.h5")

@@ -34,3 +34,20 @@ if __name__ == "__main__":
         callbacks=[early_stopping, checkpoint]
     )
     print("Best LSTM model with dropout saved to models/lstm_dropout_best.h5")
+
+# src/train_lstm.py (UPDATED with TensorBoard)
+import datetime
+from tensorflow.keras.callbacks import TensorBoard # type: ignore
+
+# Inside __main__ after defining callbacks
+log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+history = model.fit(
+    x_train, y_train,
+    epochs=10,
+    batch_size=128,
+    validation_split=0.2,
+    callbacks=[early_stopping, checkpoint, tensorboard_callback]
+)
+print(f"TensorBoard logs saved to {log_dir}")

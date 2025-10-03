@@ -1,60 +1,24 @@
-import tensorflow as tf
-import pandas as pd
 import os
+import pandas as pd
+from tensorboard.backend.event_processing import event_accumulator
 
-# Path where TensorBoard logs are stored
-log_dir = "logs/fit"
-results = []
+def extract_events(log_dir, output_csv):
+    ea = event_accumulator.EventAccumulator(log_dir)
+    ea.Reload()
 
-# Loop over each experiment directory
-for exp_name in os.listdir(log_dir):
-    exp_path = os.path.join(log_dir, exp_name)
-    if not os.path.isdir(exp_path):
-        continue
+    tags = ea.Tags()["scalars"]
+    all_data = []
 
-    # Find the .tfevents file
-    event_file = None
-    for file in os.listdir(exp_path):
-        if "tfevents" in file:
-            event_file = os.path.join(exp_path, file)
-            break
+    for tag in tags:
+        events = ea.Scalars(tag)
+        for e in events:
+            all_data.append([e.step, tag, e.value])
 
-    if not event_file:
-        continue
+    df = pd.DataFrame(all_data, columns=["Step", "Metric", "Value"])
+    df.to_csv(output_csv, index=False)
+    print(f"Saved: {output_csv}")
 
-    # Extract validation accuracy/loss from logs
-    val_acc, val_loss = None, None
-    for e in tf.compat.v1.train.summary_iterator(event_file):
-        for v in e.summary.value:
-            if v.tag == 'val_accuracy':
-                val_acc = v.simple_value
-            elif v.tag == 'val_loss':
-                val_loss = v.simple_value
-
-    # Extract hyperparameters from experiment name
-    try:
-        parts = exp_name.split('_')
-        lstm_units = int(parts[0].replace("lstm_units", ""))
-        dropout = float(parts[1].replace("dropout", ""))
-        lr = float(parts[2].replace("lr", ""))
-        bs = int(parts[3].replace("bs", ""))
-    except Exception as e:
-        lstm_units, dropout, lr, bs = None, None, None, None
-
-    results.append({
-        'Experiment': exp_name,
-        'lstm_units': lstm_units,
-        'dropout': dropout,
-        'learning_rate': lr,
-        'batch_size': bs,
-        'val_accuracy': val_acc,
-        'val_loss': val_loss
-    })
-
-# Save results to CSV
-df = pd.DataFrame(results)
-os.makedirs("images/day4", exist_ok=True)
-csv_path = "images/day4/hyperparam_results_from_logs.csv"
-df.to_csv(csv_path, index=False)
-print(f"✅ Results saved to {csv_path}")
-print(df.head())
+if __name__ == "__main__":
+    os.makedirs("results", exist_ok=True)
+    extract_events("logs/CNN", "results/cnn_results.csv")
+    extract_events("logs/LSTM", "results/lstm_results.csv")

@@ -1,22 +1,19 @@
-import pandas as pd
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import numpy as np
+from preprocess import preprocess_data
+from tensorflow.keras.models import load_model # type: ignore
 import matplotlib.pyplot as plt
 
-def plot_from_csv(csv_file, title):
-    df = pd.read_csv(csv_file)
+(x_train, y_train), (x_test, y_test) = preprocess_data()
 
-    acc = df[df["Metric"].str.contains("accuracy")]
-    loss = df[df["Metric"].str.contains("loss")]
-
-    plt.figure(figsize=(10, 5))
-    plt.plot(acc["Step"], acc["Value"], label="Accuracy")
-    plt.plot(loss["Step"], loss["Value"], label="Loss")
-    plt.title(title)
-    plt.xlabel("Epochs")
-    plt.ylabel("Value")
-    plt.legend()
-    plt.savefig(f"results/{title}_plot.png")
+def plot_confusion_matrix(model, name):
+    y_pred = (model.predict(x_test) > 0.5).astype("int32")
+    cm = confusion_matrix(y_test, y_pred)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+    disp.plot(cmap="Blues")
+    plt.title(f"{name} Confusion Matrix")
+    plt.savefig(f"results/{name}_confusion_matrix.png")
     plt.show()
 
-if __name__ == "__main__":
-    plot_from_csv("results/cnn_results.csv", "CNN")
-    plot_from_csv("results/lstm_results.csv", "LSTM")
+# Example after training:
+# cnn_model = build_cnn(); cnn_model.fit(...); plot_confusion_matrix(cnn_model, "CNN")

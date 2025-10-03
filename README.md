@@ -75,7 +75,8 @@ Each day introduces structured improvements — like a research log.
    - Saves best model weights.  
 3. **TensorBoard Logging (`logs/fit/`)**
    - Added TensorBoard callback.  
-   - Run locally with:
+   - Run locally with:kkkk
+
      ```bash
      tensorboard --logdir=logs/fit
      ```
@@ -105,3 +106,69 @@ Each day introduces structured improvements — like a research log.
 - **Day 1:** Simple baseline → proof-of-concept  
 - **Day 2:** Advanced sequence models (LSTM, GRU, BiLSTM)  
 - **Day 3:** Overfitting control + TensorBoard + embeddings  
+
+---
+
+## 📅 Day 4: Advanced Model Training & Hyperparameter Tuning
+
+On **Day 4**, we focused on exploring **different hyperparameters** (LSTM units, dropout rates, learning rates, batch sizes) to evaluate their effect on IMDB sentiment classification performance.
+
+### 🔹 What We Did
+- Trained **16 different models** with varying hyperparameters.
+- Logged training/validation accuracy & loss with **TensorBoard**.
+- Applied **EarlyStopping** to prevent overfitting.
+- Saved the **best-performing model** automatically.
+- Extracted all experiment results into a **CSV file**.
+- Visualized outcomes with **training curves** and a **confusion matrix**.
+
+---
+
+### 📊 Hyperparameter Results
+We saved the final validation accuracy/loss for each experiment into a CSV:
+
+📄 [Download CSV](images/day4/hyperparam_results_from_logs.csv)
+
+| lstm_units | dropout | learning_rate | batch_size | val_accuracy | val_loss |
+|------------|---------|---------------|------------|--------------|----------|
+| 64         | 0.2     | 0.001         | 32         | 0.885        | 0.365    |
+| 128        | 0.3     | 0.001         | 64         | 0.892        | 0.342    |
+| ...        | ...     | ...           | ...        | ...          | ...      |
+
+*(table truncated for readability – see CSV for full results)*
+
+---
+
+### 📷 Training Curves (TensorBoard & Saved Images)
+
+- **TensorBoard Accuracy Screenshot**  
+  ![TensorBoard Accuracy](images/day4/accuracy.png)
+
+- **TensorBoard Loss Screenshot**  
+  ![TensorBoard Loss](images/day4/loss.png)
+
+- **Generated Accuracy vs Validation Plot**  
+  ![Generated Accuracy](images/day4/gen_accuracy.png)
+
+- **Generated Loss Plot**  
+  ![Generated Loss](images/day4/gen_loss.png)
+
+---
+
+### 🔍 Confusion Matrix (Best Model on Test Set)
+
+We also visualized the predictions of the **best model** against the test set:
+
+- **Confusion Matrix**  
+  ![Confusion Matrix](images/day4/confusion_matrix.png)
+
+This matrix shows how many positive/negative reviews were classified correctly vs misclassified.
+
+---
+
+### 🚀 Key Takeaways
+- Models with **128 LSTM units, 0.3 dropout, and learning rate 0.001** achieved the best performance.
+- Overfitting was reduced significantly with **dropout + early stopping**.
+- TensorBoard allowed us to compare **all 16 experiments visually**.
+- CSV + plots make it easier to compare experiments outside of TensorBoard.
+
+---

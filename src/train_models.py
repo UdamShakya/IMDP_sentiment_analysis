@@ -2,9 +2,9 @@ import os
 import datetime
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import layers, models
+from tensorflow.keras import layers, models # type: ignore
 from preprocess import preprocess_data
-from tensorflow.keras.callbacks import EarlyStopping, TensorBoard
+from tensorflow.keras.callbacks import EarlyStopping, TensorBoard # type: ignore
 
 # Load data
 (x_train, y_train), (x_test, y_test) = preprocess_data()
@@ -56,3 +56,7 @@ if __name__ == "__main__":
 
     train_model(cnn_model, "CNN")
     train_model(lstm_model, "LSTM")
+
+os.makedirs("models", exist_ok=True)
+cnn_model.save("models/CNN_model.h5")
+lstm_model.save("models/LSTM_model.h5")

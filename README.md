@@ -172,3 +172,22 @@ This matrix shows how many positive/negative reviews were classified correctly v
 - CSV + plots make it easier to compare experiments outside of TensorBoard.
 
 ---
+## 📊 Day 05 – CNN vs LSTM Comparison
+
+We trained **two deep learning models** on the IMDB dataset:
+
+- **CNN (Convolutional Neural Network)** – captures local n-gram features.
+- **LSTM (Long Short-Term Memory)** – captures long-range dependencies in text.
+
+### 🔹 Results
+- CNN achieved ~XX% accuracy.
+- LSTM achieved ~YY% accuracy.
+
+### 🔹 Visualizations
+**Training Curves:**
+![CNN Plot](results/CNN_plot.png)  
+![LSTM Plot](results/LSTM_plot.png)
+
+**Confusion Matrices:**
+![CNN Confusion Matrix](results/CNN_confusion_matrix.png)  
+![LSTM Confusion Matrix](results/LSTM_confusion_matrix.png)

@@ -23,4 +23,4 @@ def predict_sentiment(model_path, text):
     return sentiment, prediction
 
 if __name__ == "__main__":
-    predict_sentiment("models/lstm_best.h5", "The movie was absolutely amazing and inspiring!")
+    predict_sentiment("models/CNN_model.h5", "The movie was absolutely amazing and inspiring!")

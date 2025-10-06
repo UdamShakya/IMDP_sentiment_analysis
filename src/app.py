@@ -7,7 +7,7 @@ st.write("Analyze the sentiment of any movie review using our trained LSTM model
 text_input = st.text_area("Enter your review:", "The movie was great!")
 
 if st.button("Analyze"):
-    sentiment, score = predict_sentiment("models/lstm_model.h5", text_input)
+    sentiment, score = predict_sentiment("models/CNN_model.h5", text_input)
     st.subheader(f"Sentiment: {sentiment}")
     st.write(f"Confidence: {score:.2f}")
 

@@ -191,3 +191,55 @@ We trained **two deep learning models** on the IMDB dataset:
 **Confusion Matrices:**
 ![CNN Confusion Matrix](results/CNN_confusion_matrix.png)  
 ![LSTM Confusion Matrix](results/LSTM_confusion_matrix.png)
+
+## 📅 **Day 06 — Building the Streamlit App**
+
+### 🧠 Overview
+Today focused on making our trained NLP model *interactive and accessible* using **Streamlit** — an open-source framework for turning machine-learning models into shareable web apps.  
+The goal: allow users to enter custom movie reviews and instantly see predictions from both **CNN** and **LSTM** models.
+
+---
+
+### ⚙️ Tasks Completed
+✅ Designed a Streamlit interface for real-time IMDB sentiment prediction  
+✅ Added an option to choose between CNN and LSTM models  
+✅ Displayed sentiment predictions with visual cues (😊 / 😞)  
+✅ Shown model accuracy and evaluation results  
+✅ Ensured compatibility with local virtual environments  
+✅ Documented full setup for deployment
+
+---
+
+### 🧩 Key Code Component – `app.py`
+```python
+import streamlit as st
+import tensorflow as tf
+import numpy as np
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from preprocess import preprocess_data
+
+# Load tokenizer and models
+MAXLEN = 200
+cnn_model = tf.keras.models.load_model("models/cnn_model.h5")
+lstm_model = tf.keras.models.load_model("models/lstm_model.h5")
+
+st.title("🎬 IMDB Sentiment Analyzer")
+st.write("Interactively predict movie review sentiments using trained models.")
+
+review = st.text_area("Enter your movie review here:")
+
+model_choice = st.selectbox("Choose Model", ["CNN", "LSTM"])
+
+if st.button("Predict Sentiment"):
+    from tensorflow.keras.datasets import imdb
+    word_index = imdb.get_word_index()
+    words = review.lower().split()
+    encoded = [word_index.get(w, 2) for w in words]  # 2 = unknown
+    padded = pad_sequences([encoded], maxlen=MAXLEN)
+
+    model = cnn_model if model_choice == "CNN" else lstm_model
+    prediction = model.predict(padded)[0][0]
+
+    sentiment = "😊 Positive" if prediction > 0.5 else "😞 Negative"
+    st.subheader(f"Predicted Sentiment: {sentiment}")
+    st.write(f"Confidence: {prediction:.2f}")

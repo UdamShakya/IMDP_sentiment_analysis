@@ -2,16 +2,16 @@
 import numpy as np
 import tensorflow as tf
 from lime.lime_text import LimeTextExplainer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.datasets import imdb
+from tensorflow.keras.preprocessing.sequence import pad_sequences # type: ignore
+from tensorflow.keras.datasets import imdb # type: ignore
 import tensorflow as tf
 
 MAXLEN = 200
 word_index = imdb.get_word_index()
 
 # Load models
-cnn_model = tf.keras.models.load_model("models/cnn_model.h5")
-lstm_model = tf.keras.models.load_model("models/lstm_model.h5")
+cnn_model = tf.keras.models.load_model("/Users/udamshakya/IMDP_sentiment_analysis/models/lstm_model.h5")
+lstm_model = tf.keras.models.load_model("/Users/udamshakya/IMDP_sentiment_analysis/models/CNN_model.h5")
 
 
 cnn_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])

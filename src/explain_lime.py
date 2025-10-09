@@ -13,6 +13,12 @@ word_index = imdb.get_word_index()
 cnn_model = tf.keras.models.load_model("models/cnn_model.h5")
 lstm_model = tf.keras.models.load_model("models/lstm_model.h5")
 
+
+cnn_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+lstm_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+
+
 def decode_review(encoded_review):
     reverse_word_index = {v: k for (k, v) in word_index.items()}
     return " ".join([reverse_word_index.get(i - 3, "?") for i in encoded_review])

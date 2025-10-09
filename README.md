@@ -243,3 +243,24 @@ if st.button("Predict Sentiment"):
     sentiment = "😊 Positive" if prediction > 0.5 else "😞 Negative"
     st.subheader(f"Predicted Sentiment: {sentiment}")
     st.write(f"Confidence: {prediction:.2f}")
+
+
+# 🧠 Day 07 — Explainable AI (XAI) with LIME for CNN & LSTM
+
+## 📅 Overview
+On **Day 07**, we focused on **model interpretability** — understanding *why* our CNN and LSTM models make their predictions.  
+We implemented **LIME (Local Interpretable Model-Agnostic Explanations)** to visualize which words most influenced the model’s sentiment decisions.  
+
+This marks our move from model performance to **model transparency** — a crucial step toward responsible AI.
+
+---
+
+## 🧩 Key Objectives
+- Integrate **LIME** for explainability of CNN and LSTM models  
+- Visualize **word importance** in individual predictions  
+- Automate generation of **interactive HTML** explanations  
+- Prepare for **Streamlit-based XAI dashboard** (Day 08)
+
+---
+
+## 📂 Folder Structure

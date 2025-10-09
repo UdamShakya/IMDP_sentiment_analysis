@@ -13,3 +13,13 @@ if st.button("Analyze"):
 
 st.markdown("---")
 st.caption("Model trained on IMDB dataset using LSTM architecture.")
+
+from explain_lime import explain_review
+import streamlit.components.v1 as components
+
+if st.button("Explain Prediction with LIME"):
+    explain_review(review, model_choice)
+    html_file = f"results/lime_{model_choice.lower()}.html"
+    st.markdown("### 🔍 Explanation Visualization")
+    with open(html_file, 'r', encoding='utf-8') as f:
+        components.html(f.read(), height=600, scrolling=True)

@@ -14,3 +14,6 @@ explainer = shap.Explainer(cnn_model, x_train[:100])
 
 shap_values = explainer(x_train[:100])
 shap.summary_plot(shap_values, show=False)
+
+import matplotlib.pyplot as plt
+plt.savefig("results/shap_summary_plot.png")

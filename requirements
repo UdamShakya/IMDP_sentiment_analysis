@@ -4,3 +4,6 @@ tensorflow
 numpy
 matplotlib
 scikit-learn
+lime
+shap
+matplotlib

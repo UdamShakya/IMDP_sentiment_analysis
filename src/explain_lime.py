@@ -3,8 +3,8 @@ import time
 import numpy as np
 import tensorflow as tf
 from lime.lime_text import LimeTextExplainer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.datasets import imdb
+from tensorflow.keras.preprocessing.sequence import pad_sequences # type: ignore
+from tensorflow.keras.datasets import imdb # type: ignore
 
 # Constants
 MAXLEN = 200
@@ -24,14 +24,14 @@ except Exception as e:
     print(f"❌ Error loading models: {e}")
     raise e
 
-# Compile models (necessary for metrics)
+# Compile models
 cnn_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 lstm_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # LIME Explainer
 explainer = LimeTextExplainer(class_names=["negative", "positive"])
 
-# Decode review helper (optional)
+# Helper to decode reviews (optional)
 def decode_review(encoded_review):
     reverse_word_index = {v: k for (k, v) in word_index.items()}
     return " ".join([reverse_word_index.get(i - 3, "?") for i in encoded_review])
@@ -41,18 +41,16 @@ def explain_review(text, model_type="CNN"):
     print(f"\n🔹 Explaining review with {model_type} model...")
     
     model = cnn_model if model_type.upper() == "CNN" else lstm_model
-    
+
+    # Vectorized predict_proba for LIME
     def predict_proba(texts):
         seqs = [
-            pad_sequences([[word_index.get(w, 2) for w in t.lower().split()]], maxlen=MAXLEN)[0] 
+            [word_index.get(w, 2) for w in t.lower().split()]
             for t in texts
         ]
-        # Predict probability for each sequence
-        preds = []
-        for s in seqs:
-            p = model.predict(np.array([s]))[0][0]
-            preds.append([1 - p, p])
-        return np.array(preds) 
+        padded_seqs = pad_sequences(seqs, maxlen=MAXLEN)
+        probs = model.predict(padded_seqs, verbose=0).flatten()
+        return np.array([[1 - p, p] for p in probs])
 
     try:
         exp = explainer.explain_instance(text, predict_proba, num_features=10)

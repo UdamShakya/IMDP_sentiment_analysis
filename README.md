@@ -261,6 +261,4 @@ This marks our move from model performance to **model transparency** — a cruci
 - Automate generation of **interactive HTML** explanations  
 - Prepare for **Streamlit-based XAI dashboard** (Day 08)
 
----
 
-## 📂 Folder Structure

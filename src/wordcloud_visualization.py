@@ -1,7 +1,7 @@
 # src/wordcloud_visualization.py
 from wordcloud import WordCloud
-from tensorflow.keras.datasets import imdb
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.datasets import imdb # type: ignore
+from tensorflow.keras.preprocessing.sequence import pad_sequences # type: ignore
 import matplotlib.pyplot as plt
 import os
 

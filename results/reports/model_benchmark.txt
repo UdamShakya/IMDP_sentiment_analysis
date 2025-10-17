@@ -1,0 +1,5 @@
+
+MODEL BENCHMARK RESULTS
+-----------------------
+CNN Model: 19.75 MB, Inference Time (1000 samples): 0.15s
+LSTM Model: 15.25 MB, Inference Time (1000 samples): 0.37s

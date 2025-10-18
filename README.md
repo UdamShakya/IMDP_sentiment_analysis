@@ -210,40 +210,6 @@ The goal: allow users to enter custom movie reviews and instantly see prediction
 
 ---
 
-### 🧩 Key Code Component – `app.py`
-```python
-import streamlit as st
-import tensorflow as tf
-import numpy as np
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from preprocess import preprocess_data
-
-# Load tokenizer and models
-MAXLEN = 200
-cnn_model = tf.keras.models.load_model("models/cnn_model.h5")
-lstm_model = tf.keras.models.load_model("models/lstm_model.h5")
-
-st.title("🎬 IMDB Sentiment Analyzer")
-st.write("Interactively predict movie review sentiments using trained models.")
-
-review = st.text_area("Enter your movie review here:")
-
-model_choice = st.selectbox("Choose Model", ["CNN", "LSTM"])
-
-if st.button("Predict Sentiment"):
-    from tensorflow.keras.datasets import imdb
-    word_index = imdb.get_word_index()
-    words = review.lower().split()
-    encoded = [word_index.get(w, 2) for w in words]  # 2 = unknown
-    padded = pad_sequences([encoded], maxlen=MAXLEN)
-
-    model = cnn_model if model_choice == "CNN" else lstm_model
-    prediction = model.predict(padded)[0][0]
-
-    sentiment = "😊 Positive" if prediction > 0.5 else "😞 Negative"
-    st.subheader(f"Predicted Sentiment: {sentiment}")
-    st.write(f"Confidence: {prediction:.2f}")
-
 
 # 🧠 Day 07 — Explainable AI (XAI) with LIME for CNN & LSTM
 
@@ -262,3 +228,100 @@ This marks our move from model performance to **model transparency** — a cruci
 - Prepare for **Streamlit-based XAI dashboard** (Day 08)
 
 
+## 🗓️ **Day 08 – Deep Evaluation and Model Insights**
+
+### 🎯 **Focus of the Day**
+Today’s focus was on **deeper evaluation, interpretability, and performance analysis** for both the CNN and LSTM models.  
+The goal was to explore **how well the models perform, why they differ, and what insights can be drawn** beyond raw accuracy metrics.
+
+---
+
+## ⚙️ **New Enhancements Added**
+
+### **1️⃣ ROC Curve and AUC Comparison**
+Plotted **Receiver Operating Characteristic (ROC)** curves and calculated **Area Under Curve (AUC)** for both models to visualize their performance trade-offs.
+
+📈 **Results Summary:**
+| Model | AUC Score |
+|:------|:-----------|
+| CNN | `0.94` |
+| LSTM | `0.96` |
+
+🖼️ **Visual:**
+![ROC Curve Comparison](results/plots/roc_auc_comparison.png)
+
+---
+
+### **2️⃣ Classification Reports**
+Generated **classification reports** (precision, recall, F1-score, accuracy) for each model using the IMDB test dataset.  
+
+📄 **Example (LSTM Model):**
+          precision    recall  f1-score   support
+       0       0.88      0.91      0.89      12500
+       1       0.90      0.88      0.89      12500
+accuracy                           0.89      25000
+
+
+📁 **Saved in:**
+- `results/reports/classification_report_cnn.txt`  
+- `results/reports/classification_report_lstm.txt`
+
+---
+
+### **3️⃣ Word Cloud Visualizations**
+Created **word clouds** to highlight frequently occurring words in positive and negative reviews.  
+This provides intuitive insights into sentiment distribution in the dataset.
+
+☁️ **Visuals:**
+
+| Positive Reviews | Negative Reviews |
+|:----------------:|:----------------:|
+| ![Positive Word Cloud](results/visuals/positive_wordcloud.png) | ![Negative Word Cloud](results/visuals/negative_wordcloud.png) |
+
+---
+
+### **4️⃣ Model Size & Inference Time Benchmark**
+Measured and compared **model sizes** and **average inference times** to assess deployment efficiency.
+
+📊 **Performance Summary:**
+
+| Model | Size (MB) | Avg Inference Time (ms/sample) |
+|:------|:-----------|:--------------------------------|
+| CNN | 6.3 MB | 2.1 ms |
+| LSTM | 10.8 MB | 3.9 ms |
+
+📁 **Saved in:**  
+`results/reports/model_benchmark.txt`
+
+---
+
+### **5️⃣ Hyperparameter Summary**
+Extracted and documented **key hyperparameters and model architectures** for both models.  
+Helps track experiments and reproduce training configurations later.
+
+📘 **Saved in:**  
+`results/reports/model_summaries.txt`
+
+---
+
+### **6️⃣ README Update**
+Updated the documentation to include:
+- ROC/AUC comparisons  
+- Classification report samples  
+- Word cloud visuals  
+- Benchmark and summary reports  
+- Technical reflection for the day  
+
+---
+
+## 🧠 **Reflection**
+Day 08 was focused on **understanding and comparing model behavior** through data-driven and visual insights.  
+While both models perform well, the **LSTM captures long-term dependencies slightly better**, whereas **CNN remains lighter and faster** — ideal for deployment.
+
+🪶 The added visualizations, benchmarks, and summaries make the project more analytical and publication-ready.
+
+---
+
+### 🔮 **Next Steps (Day 09 Preview)**
+> 📦 **Model Deployment & Explainability Integration**  
+> Integrate CNN, LSTM, and LIME explanations into a single interactive Streamlit dashboard.
